@@ -1,0 +1,1 @@
+- [Cam Jackson による記事](https://martinfowler.com/articles/micro-frontends.html)
