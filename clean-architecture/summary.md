@@ -1,3 +1,5 @@
+> 注: この要約とmermaidダイアグラムはAIによって生成されたものであり、不正確な内容を含む可能性が高いです。正確な情報については必ず原著を参照してください。
+
 ## まえがき
 
 - アーキテクチャの魅力は構造
@@ -31,6 +33,28 @@
 - 機能よりも構造にフォーカス
 
 # Part 2 構成要素から始めよ: プログラミングパラダイム
+
+```mermaid
+graph TD
+    A[プログラミングパラダイム] --> B[構造化プログラミング]
+    A --> C[オブジェクト指向プログラミング]
+    A --> D[関数型プログラミング]
+    
+    B --> E[goto文の制限]
+    B --> F[反証可能な単位]
+    
+    C --> G[ポリモーフィズム]
+    C --> H[カプセル化]
+    C --> I[依存関係の制御]
+    
+    D --> J[不変性]
+    D --> K[副作用の制限]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:4px
+    style B fill:#bbf,stroke:#333
+    style C fill:#bbf,stroke:#333
+    style D fill:#bbf,stroke:#333
+```
 
 - パラダイム: どのプログラミング構造を使うべきか、それをいつ使うべきか教えてくれる
 
@@ -143,6 +167,25 @@
 
 # Part 3 設計の原則
 
+```mermaid
+graph LR
+    S[SRP<br>単一責任の原則] --> M[モジュール]
+    O[OCP<br>オープン・クローズドの原則] --> M
+    L[LSP<br>リスコフの置換原則] --> M
+    I[ISP<br>インターフェース分離の原則] --> M
+    D[DIP<br>依存関係逆転の原則] --> M
+    
+    M --> C[変更に強い<br>理解しやすい<br>再利用可能]
+    
+    style S fill:#f96,stroke:#333
+    style O fill:#f96,stroke:#333
+    style L fill:#f96,stroke:#333
+    style I fill:#f96,stroke:#333
+    style D fill:#f96,stroke:#333
+    style M fill:#9f6,stroke:#333
+    style C fill:#69f,stroke:#333
+```
+
 - よくできたソフトウェアシステムは、クリーンなコードを書くことから
 - 加えて、SOLID_principleが必要
 - SOLID_principleの目的は、以下のような性質を持つ中間レベルのソフトウェア構造を作ること
@@ -164,6 +207,32 @@
 
 ## Ch07 SRP
 
+```mermaid
+graph TD
+    subgraph "アクター"
+        A1[会計部門]
+        A2[在庫管理部門]
+        A3[人事部門]
+    end
+    
+    subgraph "モジュール分割"
+        M1[会計モジュール]
+        M2[在庫管理モジュール]
+        M3[人事モジュール]
+    end
+    
+    A1 --> M1
+    A2 --> M2
+    A3 --> M3
+    
+    style A1 fill:#f96,stroke:#333
+    style A2 fill:#f96,stroke:#333
+    style A3 fill:#f96,stroke:#333
+    style M1 fill:#dfd,stroke:#333
+    style M2 fill:#dfd,stroke:#333
+    style M3 fill:#dfd,stroke:#333
+```
+
 - モジュールを変更する理由はたったひとつだけであるべき
     - ユーザやステークホルダーのみ
 - → <u>モジュールはたったひとつのアクターに対して責務を負うべき</u>
@@ -177,6 +246,30 @@
         - アーキテクチャレベルではアーキテクチャの境界を作るための変更の軸と呼ばれる
 
 ## Ch08 OCP
+
+```mermaid
+graph TD
+    subgraph "上位レベル"
+        H[高レベルポリシー]
+    end
+    
+    subgraph "下位レベル"
+        L1[実装A]
+        L2[実装B]
+        L3[新規実装C]
+    end
+    
+    H --> I[インターフェース]
+    I --> L1
+    I --> L2
+    I --> L3
+    
+    style H fill:#ddf,stroke:#333
+    style I fill:#f9f,stroke:#333
+    style L1 fill:#fdd,stroke:#333
+    style L2 fill:#fdd,stroke:#333
+    style L3 fill:#fdd,stroke:#333,stroke-dasharray: 5 5
+```
 
 - ソフトウェアの構成要素は拡張に対しては開いていて、修正に対して閉じていなければならない
 - コンポーネントのレベルを考慮するときにさらに重要になる原則
@@ -202,16 +295,77 @@
 
 ## Ch09 LSP
 
+```mermaid
+graph TD
+    T[基本型T] --> S1[派生型S1]
+    T --> S2[派生型S2]
+    T --> S3[派生型S3]
+    
+    P[プログラムP]
+    P --> |uses| T
+    P -.-> |can use| S1
+    P -.-> |can use| S2
+    P -.-> |can use| S3
+    
+    style T fill:#ddf,stroke:#333
+    style S1 fill:#dfd,stroke:#333
+    style S2 fill:#dfd,stroke:#333
+    style S3 fill:#dfd,stroke:#333
+    style P fill:#f96,stroke:#333
+```
+
 - 派生型
     - S型のオブジェクトo1の各々に、対応するT型のオブジェクトo2が1つ存在し、Tを使って定義されたプログラムPに対してo2の代わりにo1を使ってもPの振る舞いが変わらない場合、SはTの派生型であると言える
 - LSPはオブジェクト指向における継承の使い方の指針となるだけでなく、適用範囲が広がり、インターフェースと実装に関するソフトウェアの原則となっている
 
 ## Ch10 ISP; インターフェース分離の原則
 
+```mermaid
+graph TD
+    subgraph "分離前"
+        F[Fat Interface]
+        C1[Client 1] --> F
+        C2[Client 2] --> F
+        C3[Client 3] --> F
+    end
+    
+    subgraph "分離後"
+        I1[Interface 1]
+        I2[Interface 2]
+        I3[Interface 3]
+        C4[Client 1] --> I1
+        C5[Client 2] --> I2
+        C6[Client 3] --> I3
+    end
+    
+    style F fill:#fdd,stroke:#333
+    style I1 fill:#dfd,stroke:#333
+    style I2 fill:#dfd,stroke:#333
+    style I3 fill:#dfd,stroke:#333
+```
+
 - 操作をインターフェースに分離することで、関係ない部分の変更について再コンパイルと再デプロイが不要になる
 - 不要な依存関係は避ける
 
 ## Ch11 DIP
+
+```mermaid
+graph TD
+    subgraph "従来の依存関係"
+        H1[High Level] --> L1[Low Level]
+    end
+    
+    subgraph "DIPによる依存関係"
+        H2[High Level] --> I[Interface]
+        L2[Low Level] --> I
+    end
+    
+    style H1 fill:#ddf,stroke:#333
+    style H2 fill:#ddf,stroke:#333
+    style L1 fill:#fdd,stroke:#333
+    style L2 fill:#fdd,stroke:#333
+    style I fill:#f9f,stroke:#333
+```
 
 - ソースコードの依存関係が具象ではなく抽象だけを参照しているものが、最も柔軟なシステム
     - これがDIPの伝えていること
@@ -228,6 +382,37 @@
     - 具象コンポーネントには、ビジネスルールが操作する実装の詳細が含まれる
 
 # Part 4 コンポーネントの原則
+
+```mermaid
+graph TD
+    subgraph "凝集性の原則"
+        REP[REP<br>再利用・リリース等価]
+        CCP[CCP<br>閉鎖性共通]
+        CRP[CRP<br>全再利用]
+    end
+    
+    subgraph "結合の原則"
+        ADP[ADP<br>非循環依存関係]
+        SDP[SDP<br>安定依存]
+        SAP[SAP<br>安定度・抽象度等価]
+    end
+    
+    REP --> COMP[コンポーネント]
+    CCP --> COMP
+    CRP --> COMP
+    
+    COMP --> ADP
+    COMP --> SDP
+    COMP --> SAP
+    
+    style REP fill:#f96,stroke:#333
+    style CCP fill:#f96,stroke:#333
+    style CRP fill:#f96,stroke:#333
+    style ADP fill:#69f,stroke:#333
+    style SDP fill:#69f,stroke:#333
+    style SAP fill:#69f,stroke:#333
+    style COMP fill:#9f6,stroke:#333
+```
 
 ## Ch12 コンポーネント
 
@@ -269,6 +454,31 @@
 - どのクラスをコンポーネントにまとめるか決めるときは、開発時の利便性と再利用性のトレードオフを考慮する必要がある
 
 ## Ch14 コンポーネントの結合
+
+```mermaid
+graph TD
+    A[Component A] --> B[Component B]
+    B --> C[Component C]
+    C --> D[Component D]
+    
+    subgraph "循環依存の例"
+        E[Component E] --> F[Component F]
+        F --> G[Component G]
+        G --> E
+    end
+    
+    subgraph "DIPによる解決"
+        H[Component H] --> I[Interface]
+        J[Component J] --> I
+    end
+    
+    style E fill:#fdd,stroke:#333
+    style F fill:#fdd,stroke:#333
+    style G fill:#fdd,stroke:#333
+    style H fill:#dfd,stroke:#333
+    style I fill:#ddf,stroke:#333
+    style J fill:#dfd,stroke:#333
+```
 
 - 非循環依存関係の原則(ADP)
     - コンポーネントの依存グラフに循環依存があってはいけない
@@ -330,6 +540,42 @@
 
 ## Ch16 独立性
 
+```mermaid
+graph TD
+    subgraph "水平レイヤー"
+        UI[UI Layer]
+        APP[Application Layer<br>特有のビジネスルール]
+        CORE[Core Layer<br>依存しないビジネスルール]
+        DB[Database Layer]
+    end
+    
+    subgraph "垂直スライス"
+        UC1[UseCase 1]
+        UC2[UseCase 2]
+    end
+    
+    UI --> APP
+    APP --> CORE
+    APP --> DB
+    
+    UC1 -.-> UI
+    UC1 -.-> APP
+    UC1 -.-> CORE
+    UC1 -.-> DB
+    
+    UC2 -.-> UI
+    UC2 -.-> APP
+    UC2 -.-> CORE
+    UC2 -.-> DB
+    
+    style UI fill:#fdd,stroke:#333
+    style APP fill:#dfd,stroke:#333
+    style CORE fill:#ddf,stroke:#333
+    style DB fill:#fdd,stroke:#333
+    style UC1 fill:#f9f,stroke:#333,stroke-dasharray: 5 5
+    style UC2 fill:#f9f,stroke:#333,stroke-dasharray: 5 5
+```
+
 - コンウェイの法則: システムを設計する組織は、組織のコミュニケーション構造をコピーした構造の設計を生み出す
 - 異なる理由で変更されるものを分離し、同じ理由で変更されるものをまとめる
 - システムは切り離された水平レイヤーで分割されている
@@ -343,6 +589,31 @@
 - いざというときのために、サービスを作れそうなところまで切り離すのがおすすめ
 
 ## Ch17 バウンダリー: 境界線を引く
+
+```mermaid
+graph LR
+    subgraph "コアビジネス"
+        CORE[Core Business Rules]
+    end
+    
+    subgraph "プラグイン"
+        UI[UI]
+        DB[Database]
+        WEB[Web]
+        DEVICE[Devices]
+    end
+    
+    UI --> CORE
+    DB --> CORE
+    WEB --> CORE
+    DEVICE --> CORE
+    
+    style CORE fill:#ddf,stroke:#333,stroke-width:3px
+    style UI fill:#fdd,stroke:#333
+    style DB fill:#fdd,stroke:#333
+    style WEB fill:#fdd,stroke:#333
+    style DEVICE fill:#fdd,stroke:#333
+```
 
 - 決定をできるだけ引き延ばす
 - 選択を遅らせるための境界線
@@ -359,6 +630,20 @@
 
 ## Ch18 境界の解剖学
 
+```mermaid
+graph TD
+    subgraph "境界の種類"
+        M[モノリス<br>関数呼び出し] --> D[動的リンクライブラリ]
+        D --> P[ローカルプロセス<br>別アドレス空間]
+        P --> S[サービス<br>ネットワーク通信]
+    end
+    
+    style M fill:#dfd,stroke:#333
+    style D fill:#f9f,stroke:#333
+    style P fill:#f9f,stroke:#333
+    style S fill:#fdd,stroke:#333
+```
+
 - 適切に境界を超えるには、ソースコードの依存関係の管理が必要
 - モノリスのコンポーネント間の通信は単なる関数呼び出し
 - アーキテクチャの境界の最も単純な物理的表現が、動的リンクライブラリ
@@ -373,12 +658,50 @@
 
 ## Ch19 方針とレベル
 
+```mermaid
+graph LR
+    I[入力] --> L1[レベル1]
+    L1 --> L2[レベル2]
+    L2 --> L3[レベル3]
+    L3 --> O[出力]
+    
+    style I fill:#dfd,stroke:#333
+    style O fill:#dfd,stroke:#333
+    style L1 fill:#f9f,stroke:#333
+    style L2 fill:#f9f,stroke:#333
+    style L3 fill:#f9f,stroke:#333
+```
+
 - ソフトウェアシステムは、方針を示したもの
     - コンピュータプログラムは、入力を出力に変換する方針を詳細に記述したもの
 - レベルの厳密な定義は、入出力からの距離
 - ソースコードの依存性はデータフローから切り離し、レベルと結びつけるべき
 
 ## Ch20 ビジネスルール
+
+```mermaid
+graph TD
+    subgraph "エンティティ"
+        E[エンティティ]
+        CD[最重要ビジネスデータ]
+        CR[最重要ビジネスルール]
+        E --> CD
+        E --> CR
+    end
+    
+    subgraph "ユースケース"
+        UC[ユースケース]
+        AR[アプリケーション固有<br>ビジネスルール]
+        UC --> AR
+        AR --> E
+    end
+    
+    style E fill:#ddf,stroke:#333
+    style CD fill:#dfd,stroke:#333
+    style CR fill:#dfd,stroke:#333
+    style UC fill:#fdd,stroke:#333
+    style AR fill:#fdd,stroke:#333
+```
 
 - システムが自動化されていなくても存在するものを、最重要ビジネスルール、最重要ビジネスデータと呼ぶ
 - エンティティとは、最重要ビジネスデータを操作する最重要ビジネスルールをいくつか含んだもの
@@ -421,7 +744,41 @@
     - UI非依存
     - DB非依存
     - 外部エージェント非依存
-- 図22-1 クリーンアーキテクチャ
+```mermaid
+graph TD
+    subgraph "外側の層"
+        A[フレームワーク & ドライバ]
+    end
+    
+    subgraph "インターフェースアダプタ層"
+        B[Controllers]
+        C[Gateways]
+        D[Presenters]
+    end
+    
+    subgraph "ユースケース層"
+        E[アプリケーション固有のビジネスルール]
+    end
+    
+    subgraph "エンティティ層"
+        F[エンタープライズ全体のビジネスルール]
+    end
+    
+    A --> B
+    A --> C
+    A --> D
+    B --> E
+    C --> E
+    D --> E
+    E --> F
+    
+    style A fill:#ddd,stroke:#333
+    style B fill:#fdd,stroke:#333
+    style C fill:#fdd,stroke:#333
+    style D fill:#fdd,stroke:#333
+    style E fill:#dfd,stroke:#333
+    style F fill:#ddf,stroke:#333
+```
 - アーキテクチャを動作させる最も重要なルールは、依存性のルール
     - ソースコードの依存性は、内側だけに向かっていなければならない
 - エンティティ
@@ -444,6 +801,24 @@
 
 ## Ch23 プレゼンターとHumble_Object
 
+```mermaid
+graph TD
+    subgraph "プレゼンター/ビュー"
+        P[Presenter<br>テスト可能] --> V[View<br>Humble Object]
+    end
+    
+    subgraph "データベース"
+        I[Interactor<br>テスト可能] --> G[Gateway<br>Humble Object]
+        G --> DB[Database]
+    end
+    
+    style P fill:#dfd,stroke:#333
+    style V fill:#fdd,stroke:#333
+    style I fill:#dfd,stroke:#333
+    style G fill:#fdd,stroke:#333
+    style DB fill:#ddd,stroke:#333
+```
+
 - Humble_Objectパターンは、ユニットテストを実行する人が、テストしにくい振る舞いとテストしやすい振る舞いを分離するために生み出されたデザインパターン
     - 振る舞いを2つのモジュールまたはクラスに分割するだけ
     - プレゼンターとビュー
@@ -460,6 +835,29 @@
 - 境界はテストしにくい部分とテストしやすい部分に分割する
 
 ## Ch24 部分的な境界
+
+```mermaid
+graph TD
+    subgraph "完全な境界"
+        A1[Component A] --> I1[Interface]
+        B1[Component B] --> I1
+    end
+    
+    subgraph "片方だけの境界"
+        A2[Component A] --> I2[Interface]
+        B2[Component B] -.-> A2
+    end
+    
+    subgraph "Facadeによる境界"
+        A3[Component A] --> F[Facade]
+        B3[Component B] --> F
+        F --> C[Component C]
+    end
+    
+    style I1 fill:#ddf,stroke:#333
+    style I2 fill:#ddf,stroke:#333
+    style F fill:#fdd,stroke:#333
+```
 
 - 部分的な境界を構築する1つの方法は、独立してコンパイルやデプロイが可能なコンポーネントを準備したあとで、それらを同じコンポーネントにまとめるというもの
 - 片方だけの境界は双方向の分離の維持よりはコストが少ないが、分離の劣化の可能性が残る
@@ -492,6 +890,29 @@
 
 ## Ch28 テスト境界
 
+```mermaid
+graph TD
+    subgraph "テスト構造"
+        T1[Unit Tests] --> TA[Test API]
+        T2[Integration Tests] --> TA
+        T3[Component Tests] --> TA
+        
+        TA --> P[Production Code]
+    end
+    
+    subgraph "デプロイ"
+        D1[Test Components] -.-> D2[Production Components]
+    end
+    
+    style T1 fill:#dfd,stroke:#333
+    style T2 fill:#dfd,stroke:#333
+    style T3 fill:#dfd,stroke:#333
+    style TA fill:#f9f,stroke:#333
+    style P fill:#ddf,stroke:#333
+    style D1 fill:#fdd,stroke:#333
+    style D2 fill:#ddf,stroke:#333
+```
+
 - テストはアーキテクチャの円の最も外側にある
 - 変化しやすいものに依存しないテストを設計する
 - テストAPIを作成して、テストをアプリケーションから分離する
@@ -500,6 +921,34 @@
 - テストAPIのスーパーパワーはプロダクションシステムにデプロイされると危険なので、テストAPIとその危険な実装部分は、独立してデプロイ可能な個別のコンポーネントに入れておく必要がある
 
 ## Ch29 クリーン組み込みアーキテクチャ
+
+```mermaid
+graph TD
+    subgraph "レイヤー構造"
+        SW[Software Layer]
+        OSAL[OS Abstraction Layer]
+        OS[Operating System]
+        PAL[Processor Abstraction Layer]
+        FW[Firmware Layer]
+        HAL[Hardware Abstraction Layer]
+        HW[Hardware Layer]
+    end
+    
+    SW --> OSAL
+    OSAL --> OS
+    OS --> PAL
+    PAL --> FW
+    FW --> HAL
+    HAL --> HW
+    
+    style SW fill:#ddf,stroke:#333
+    style OSAL fill:#f9f,stroke:#333
+    style OS fill:#dfd,stroke:#333
+    style PAL fill:#f9f,stroke:#333
+    style FW fill:#fdd,stroke:#333
+    style HAL fill:#f9f,stroke:#333
+    style HW fill:#ddd,stroke:#333
+```
 
 - ファームウェア: ソフトウェアとハードウェアとやり取りするコード
 - ファームウェアは、ハードウェアの進化に合わせてどれだけ変化しにくいかで決まる
@@ -536,6 +985,18 @@
 - フレームワークをコアのコードに混ぜない
 
 ## Ch33 事例: 動画販売サイト
+
+```mermaid
+graph TD
+    subgraph "2つの分割方法"
+        A[アクターによる分割<br>変更の理由] --> R[変更の分離]
+        D[依存性による分割<br>変更の頻度] --> R
+    end
+    
+    style A fill:#f96,stroke:#333
+    style D fill:#f96,stroke:#333
+    style R fill:#dfd,stroke:#333
+```
 
 - システムの最初のアーキテクチャを決めるための第一歩は、アクターとユースケースを見つけること
 - あるアクターの変更がほかのアクターたちに影響を及ぼさないようにする
